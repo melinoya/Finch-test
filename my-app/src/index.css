@@ -1,0 +1,115 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 11px;
+  padding-top: 14px;
+  padding-bottom: 24px;
+  background-color: #ffffff;
+  border-radius: 3px;
+}
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 5px;
+  padding-right: 2px;
+  margin-bottom: 12px;
+}
+.card__number {
+  font-size: 16px;
+  font-weight: 400;
+}
+.card__wand-button {
+  width: 20px;
+  height: 20px;
+  /*background: url("../img/card/magic-wand.svg") no-repeat 50%;*/
+}
+.card__fields {
+  margin-bottom: 23px;
+}
+.card__field {
+  margin-bottom: 16px;
+}
+.card__field:last-of-type {
+  margin-bottom: 0;
+}
+.card__button {
+  display: flex;
+  justify-content: center;
+}
+.card__text-info {
+  padding-left: 5px;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+body {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #4568DC 0%, #B06AB3 100%), #EF8E48;
+}
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+  padding: 17px 12px;
+}
+button {
+  width: 178px;
+  height: 43px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  background-color: transparent;
+  border-radius: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+}
+.field__header {
+  padding: 0 5px;
+  margin-bottom: 8px;
+}
+.field__description {
+  display: flex;
+}
+.field__number {
+  margin-right: 8px;
+  font-weight: 400;
+}
+.field__table {
+  display: flex;
+  flex-wrap: wrap;
+}
+.filed__cell {
+  width: 40px;
+  height: 40px;
+  margin-left: -1px;
+  margin-bottom: -1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 400;
+  border: 1px solid #DDDDDD;
+  border-radius: 5px;
+}
+.filed__cell.active {
+  width: 34px;
+  height: 34px;
+  margin: 2px;
+  margin-right: 3px;
+  background-color: #FFD205;
+  border: none;
+}
