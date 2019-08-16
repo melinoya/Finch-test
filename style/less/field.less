@@ -1,0 +1,44 @@
+.field__header {
+  padding: 0 5px;
+  margin-bottom: 8px;
+}
+
+.field__description {
+  display: flex;
+}
+
+.field__number {
+  margin-right: 8px;
+
+  font-weight: 400;
+}
+
+.field__table {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filed__cell {
+  width: 40px;
+  height: 40px;
+  margin-left: -1px;
+  margin-bottom: -1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 400;
+
+  border: 1px solid #DDDDDD;
+  border-radius: 5px;
+
+  &.active {
+    width: 34px;
+    height: 34px;
+    margin: 2px;
+    margin-right: 3px;
+
+    background-color: #FFD205;
+    border: none;
+  }
+}
