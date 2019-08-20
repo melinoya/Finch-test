@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Fields from './Fields'
 import FinalPage from './FinalPage'
-import { generateNumbers, sendInfo } from './Util'
+import {generateNumbers, sendInfo} from './Util'
 
 class Ticket extends Component {
   constructor() {
@@ -113,17 +113,17 @@ class Ticket extends Component {
     let element = this.state[ticketNum].filter(item => item.cellNumber === key);
     let counter = {...this.state.counters};
 
-    if (counter[counterNum][counterName] < numQuantity) {
-      if (element[0].cellState == null) {
-        counter[counterNum][counterName]++;
-        element[0].cellState = 'active'
-      } else {
+    switch (element[0].cellState) {
+      case null:
+        if (counter[counterNum][counterName] < numQuantity) {
+          counter[counterNum][counterName]++;
+          element[0].cellState = 'active';
+        }
+        break;
+      case 'active':
         counter[counterNum][counterName]--;
-        element[0].cellState = null
-      }
-    } else if (element[0].cellState != null) {
-      counter[counterNum][counterName]--;
-      element[0].cellState = null
+        element[0].cellState = null;
+        break;
     }
 
     this.setState({
@@ -149,12 +149,13 @@ class Ticket extends Component {
       item.cellState = null;
     });
 
-    for(let i = 0; i < firstArray.length; i++) {
+    for (let i = 0; i < firstArray.length; i++) {
       newState.firstTicket[firstArray[i] - 1].cellState = 'active';
     }
 
     newState.secondTicket[secondArray[0] - 1].cellState = 'active';
     this.setState({newState});
+
   }
 
   //фильтр для отмеченных ячеек
@@ -188,10 +189,8 @@ class Ticket extends Component {
 
     if (counterMain > 3) {
       this.winningStatus = true;
-    } else if (counterMain === 3) {
-      if (checkedFieldsSecond.includes(secondRandomNumbers[0])) {
-        this.winningStatus = true;
-      }
+    } else if (counterMain === 3 && checkedFieldsSecond.includes(secondRandomNumbers[0])) {
+      this.winningStatus = true;
     }
 
     this.JSONfile = JSON.stringify(
@@ -217,7 +216,8 @@ class Ticket extends Component {
                   <span>Билет 1</span>
                 </div>
                 <div className="card__random">
-                  <div onClick={() => this.fillInRandomNumb()} className="card__wand-button">
+                  <div onClick={() => this.fillInRandomNumb()}
+                       className="card__wand-button">
                     <svg width="20"
                          height="20"
                          viewBox="0 0 20 20"
@@ -266,7 +266,7 @@ class Ticket extends Component {
       );
     } else {
       return (
-          <FinalPage statusWin={this.winningStatus} />
+          <FinalPage statusWin={this.winningStatus}/>
       );
     }
 
