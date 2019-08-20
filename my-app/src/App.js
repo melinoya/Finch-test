@@ -1,6 +1,5 @@
 import React from 'react';
-import Ticket from './components/ticket'
-import logo from './logo.svg';
+import Ticket from './components/Ticket'
 import './App.css';
 
 function App() {

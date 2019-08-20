@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 600px;
+  min-height: 380px;
   padding: 0 11px;
   padding-top: 14px;
   padding-bottom: 24px;
@@ -22,7 +24,6 @@
 .card__wand-button {
   width: 20px;
   height: 20px;
-  background: url("../img/card/magic-wand.svg") no-repeat 50%;
 }
 .card__fields {
   margin-bottom: 23px;
@@ -64,6 +65,8 @@ main {
   background: linear-gradient(180deg, #4568DC 0%, #B06AB3 100%), #EF8E48;
 }
 .wrapper {
+  display: flex;
+  justify-content: center;
   width: 100%;
   margin: 0 auto;
   padding: 17px 12px;
@@ -109,6 +112,7 @@ button {
   width: 34px;
   height: 34px;
   margin: 2px;
+  margin-top: 3px;
   margin-right: 3px;
   background-color: #FFD205;
   border: none;

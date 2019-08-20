@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
-import Fields from './fields'
+import Fields from './Fields'
+import FinalPage from './FinalPage'
+import { generateNumbers, sendInfo } from './Util'
 
 class Ticket extends Component {
   constructor() {
     super();
     this.JSONfile = null;
     this.counterJSON = 0;
+    this.winningStatus = false;
   }
 
   state = {
@@ -102,7 +105,7 @@ class Ticket extends Component {
       }
     ],
     infoSent: 0
-  }
+  };
 
   //функция для отметки полей
 
@@ -130,26 +133,38 @@ class Ticket extends Component {
     })
   }
 
-  // функция для генерации случайного массива
+  //заполение рандомных ячеек при клике на Волшебную палочку
 
-  generateNumbers(numbersQuantity, maxNumber) {
-    let randomNumbers = [];
-    while (randomNumbers.length < numbersQuantity) {
-      let randomNumber = Math.floor(Math.random() * maxNumber + 1);
-      if (!randomNumbers.includes(randomNumber)) {
-        randomNumbers.push(randomNumber);
-      }
+  fillInRandomNumb() {
+    let firstArray = generateNumbers(8, 19);
+    let secondArray = generateNumbers(1, 2);
+
+    let newState = {...this.state};
+
+    newState.firstTicket.forEach(item => {
+      item.cellState = null;
+    });
+
+    newState.secondTicket.forEach(item => {
+      item.cellState = null;
+    });
+
+    for(let i = 0; i < firstArray.length; i++) {
+      newState.firstTicket[firstArray[i] - 1].cellState = 'active';
     }
 
-    return randomNumbers;
+    newState.secondTicket[secondArray[0] - 1].cellState = 'active';
+    this.setState({newState});
   }
+
+  //фильтр для отмеченных ячеек
 
   filterCheckedFields(ticketNumber) {
     let checkedFields = this.state[ticketNumber].filter(item => item.cellState === 'active');
     let arrayNumbers = [];
     checkedFields.forEach(item => {
       arrayNumbers.push(+item.cellNumber)
-    })
+    });
 
     return arrayNumbers;
   }
@@ -157,32 +172,27 @@ class Ticket extends Component {
   // проверка выигрышных комбинаций
 
   checkIfWin() {
-    let firstRandomNumbers = this.generateNumbers(8, 19);
-    let secondRandomNumbers = this.generateNumbers(1, 2);
+    let firstRandomNumbers = generateNumbers(8, 19);
+    let secondRandomNumbers = generateNumbers(1, 2);
 
     let checkedFieldsFirst = this.filterCheckedFields('firstTicket');
     let checkedFieldsSecond = this.filterCheckedFields('secondTicket');
 
     let counterMain = 0;
-    let statusWin = false;
 
     for (let i = 0; i < firstRandomNumbers.length; i++) {
-      console.log(checkedFieldsFirst.includes(firstRandomNumbers[i]))
       if (checkedFieldsFirst.includes(firstRandomNumbers[i])) {
         counterMain++;
       }
     }
 
     if (counterMain > 3) {
-      statusWin = true;
+      this.winningStatus = true;
     } else if (counterMain === 3) {
       if (checkedFieldsSecond.includes(secondRandomNumbers[0])) {
-        statusWin = true;
+        this.winningStatus = true;
       }
     }
-
-    console.log(firstRandomNumbers)
-    console.log(checkedFieldsFirst)
 
     this.JSONfile = JSON.stringify(
         {
@@ -191,37 +201,10 @@ class Ticket extends Component {
                 firstField: checkedFieldsFirst,
                 secondField: checkedFieldsSecond
               },
-          isTicketWon: statusWin
+          isTicketWon: this.winningStatus
         });
 
-    console.log(this.JSONfile)
-
-    this.sendInfo();
-  }
-
-  sendInfo() {
-    let self = this;
-
-
-    let xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-    xhr.open('POST', 'http://httpbin.org/post');
-    xhr.send(this.JSONfile);
-
-    xhr.onload = function () {
-      if (xhr.status !== 200) {
-        if (self.counterJSON <= 2) {
-          self.counterJSON++;
-          setTimeout(self.sendInfo, 2000);
-        } else {
-          alert(`Ошибка ${xhr.status}: ${xhr.statusText}`);
-        }
-      } else {
-        console.log('Готово')
-        self.setState({infoSent: 1})
-      }
-    };
-
+    sendInfo(this.JSONfile, this.counterJSON);
   }
 
   render() {
@@ -234,7 +217,7 @@ class Ticket extends Component {
                   <span>Билет 1</span>
                 </div>
                 <div className="card__random">
-                  <div className="card__wand-button">
+                  <div onClick={() => this.fillInRandomNumb()} className="card__wand-button">
                     <svg width="20"
                          height="20"
                          viewBox="0 0 20 20"
@@ -276,23 +259,14 @@ class Ticket extends Component {
               </div>
 
               <div className="card__button">
-                <button onClick={evt => this.checkIfWin(evt)}>Показать результат</button>
+                <button onClick={() => this.checkIfWin()}>Показать результат</button>
               </div>
             </section>
           </div>
       );
     } else {
       return (
-          <section className="card">
-            <header className="card__header">
-              <div className="card__number">
-                <span>Билет 1</span>
-              </div>
-            </header>
-            <div className="card__text-info">
-              <span>Ого, вы выиграли! Поздравляем!</span>
-            </div>
-          </section>
+          <FinalPage statusWin={this.winningStatus} />
       );
     }
 
